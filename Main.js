@@ -73,8 +73,9 @@ export default class Main extends Component {
     itemsRef.on("value", snapshot => {
       let items = [];
       for (let key in snapshot.val()) {
-        console.log(snapshot.val()[key].translation);
-        items.push(snapshot.val()[key].translation);
+        console.log(key);
+        let newPair = snapshot.val()[key].translation;
+        items.push([key, newPair]);
       }
       this.setState({
         dataSource: this.state.dataSource.cloneWithRows(items)
@@ -147,9 +148,9 @@ export default class Main extends Component {
                   {
                     text: "Delete",
                     backgroundColor: "red",
-                    //  underlayColor: 'rgba(0, 0, 0, 1, 0.6)',
                     onPress: () => {
-                      /*console.log(firebase.database().ref().child('items').child('translation').child(rowData));*/
+                      firebase.database().ref(`items/${rowData[0]}`).remove();
+                      //console.log(rowData[1]);
                     }
                   }
                 ]}
@@ -157,7 +158,7 @@ export default class Main extends Component {
                 backgroundColor="transparent"
               >
                 <View style={styles.li}>
-                  <Text style={styles.liText}>{rowData}</Text>
+                  <Text style={styles.liText}>{rowData[1]}</Text>
                 </View>
               </Swipeout>
             )}
